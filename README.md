@@ -3,5 +3,5 @@
 ### Make platformers quickly without having to focus on boilerplate code
 
 ### Frameworks Used
-[cocos2D-x](http://www.cocos2d-x.org)
-[Artemis](https://github.com/vinova/Artemis-Cpp)
+* [cocos2D-x](http://www.cocos2d-x.org)
+* [Artemis](https://github.com/vinova/Artemis-Cpp)
