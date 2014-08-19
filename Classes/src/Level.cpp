@@ -1,41 +1,72 @@
-#include "shefLevel.h"
+#include "shefLevelOne.h"
+
+#include <iostream>
 
 USING_NS_CC;
 
-Level::Level()
+/* Scene */
+Scene* LevelOne::createScene()
 {
-    /* ECS */
-    world = new artemis::World();
-    world->setDelta(0.016f);
+    auto scene = Scene::create();
+    auto layer = LevelOne::create();
+    scene->addChild(layer);
 
-    systemManager = world->getSystemManager();
-    entityManager = world->getEntityManager();
-
-    // Initialize new systems here
-    movementSystem = (MovementSystem*)systemManager->setSystem(new MovementSystem());
-
-    systemManager->initializeAll();
-
-    /* Physics */
-    pPixelsPerMeter = 32.0f;
-    pGravity = -pPixelsPerMeter / 0.7f;
-    pWorld = new b2World(b2Vec2(0.0f, pGravity));
-    pWorld->SetAllowSleeping(true);
-    pWorld->SetContinuousPhysics(true);
-
-    listener = new ContactListener();
-    pWorld->SetContactListener(listener);
-
-    std::cout << "level constructor" << std::endl;
+    return scene;
 }
 
-/* ECS */
-void Level::processSystems()
+bool LevelOne::init()
 {
-    movementSystem->process();
+
+    if (!Scene::init()) return false;
+
+    this->schedule(schedule_selector(LevelOne::update));
+    return true;
+
+    level = new Level();
+    loadResources();
+
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    MoveTo* act1 = MoveTo::create(0.5, Point(200, 200));
+    shefSprite->runAction(Repeat::create(act1, 1));
+
+    return true;
 }
 
+void LevelOne::update(float dt)
+{
+    level->world->loopStart();
+    level->processSystems();
+}
 
+/* Resources */
+void LevelOne::loadResources()
+{
+    auto cache = SpriteFrameCache::getInstance();
 
+    cache->addSpriteFramesWithFile("ragna.plist", "ragna.png");
+    shefSprite = Sprite::createWithSpriteFrameName("rg000_00.png");
 
+    Vector<SpriteFrame*> frames;
+    for (int i = 0; i < 7; ++i)
+    {
+        std::stringstream ss;
+        ss << "rg000_0" << i << ".png";
+        std::cout << "Loading " << ss.str() << "\n";
+        frames.pushBack(cache->getSpriteFrameByName(ss.str().c_str()));
+    }
 
+    Animation* animation = Animation::createWithSpriteFrames(frames, 0.016f);
+    // shefSprite->runAction( RepeatForever::create( Animate::create(animation) ) );
+    shefSprite->runAction( Animate::create( animation ) );
+    shefSprite->setAnchorPoint(Point(0,0));
+    shefSprite->setPosition(Point(0, 0));
+    this->addChild(shefSprite, 0);
+    std::cout << "levelone loadresources end" << std::endl;
+}
+
+void LevelOne::initAnimations()
+{
+    
+}

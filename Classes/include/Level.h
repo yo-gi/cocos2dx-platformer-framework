@@ -1,42 +1,28 @@
-#ifndef __LEVEL_H__
-#define __LEVEL_H__
+#ifndef __LEVEL_ONE__
+#define __LEVEL_ONE__
 
-#pragma once
 
-#include "shef.h"
+#include "shefLevel.h"
 
-#include "shefContactListener.h"
-
-#include "shefMovementSystem.h"
-//#include "shefAnimationSystem.h"
-
-//#include "LevelObject.h"
-
-class Level
+class LevelOne : public cocos2d::Scene
 {
 public:
-    Level();
-
-    /* ECS */
-    artemis::World* world;
-    artemis::SystemManager* systemManager;
-    artemis::EntityManager* entityManager;
-    void processSystems();
-
-    // Declare systems here
-    MovementSystem* movementSystem;
-
-    /* Physics */
-    float pPixelsPerMeter;
-    float pGravity;
-    b2World* pWorld;
-    ContactListener* listener;
-
-    /* Resources */
+    void update(float dt);
 
     /* Scene */
+    static cocos2d::Scene* createScene();
+    virtual bool init();
+    CREATE_FUNC(LevelOne);
 
+    /* Level Management */
+    Level* level;
+
+    /* Resources */
+    cocos2d::Sprite* shefSprite;
+
+    void loadResources();
+    void initAnimations();
 
 };
 
-#endif // __LEVEL_H__
+#endif // __LEVEL_ONE__
